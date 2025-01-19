@@ -2,6 +2,7 @@ using System.Reflection;
 using Carter;
 using Membership;
 using Pos;
+using Shared.Exceptions.Handler;
 using Shared.Extensions;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -19,11 +20,31 @@ builder.Services
     .AddMembershipModule(builder.Configuration)
     .AddPosModule(builder.Configuration);
 
+builder.Services
+    .AddExceptionHandler<CustomExceptionHandler>();
+
+builder.Services.AddOpenApi();
+
+builder.Services.AddSwagger();
+
 WebApplication app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger UI Modified V.2");
+        c.RoutePrefix = string.Empty;
+    });
+}
 
 app.MapCarter();
 
 app.UseMembershipModule()
     .UsePosModule();
+
+
 
 app.Run();
