@@ -1,4 +1,6 @@
-﻿namespace Membership;
+﻿using Membership.Modules;
+
+namespace Membership;
 
 public static class MembershipModule
 {
@@ -16,6 +18,8 @@ public static class MembershipModule
             options
                 .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         });
+
+        services.AddModulesServices();
         
         return services;
     }
