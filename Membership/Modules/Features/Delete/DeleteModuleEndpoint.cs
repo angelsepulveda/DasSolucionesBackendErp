@@ -16,5 +16,7 @@ public class DeleteModuleEndpoint : ICarterModule
             .ProducesProblem(StatusCodes.Status404NotFound)
             .WithSummary("Delete module")
             .WithDescription("Delete Module");
+        
+        
     }
 }

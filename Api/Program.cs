@@ -1,10 +1,3 @@
-using System.Reflection;
-using Carter;
-using Membership;
-using Pos;
-using Shared.Exceptions.Handler;
-using Shared.Extensions;
-
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 Assembly membershipAssembly = typeof(MembershipModule).Assembly;
@@ -27,6 +20,17 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddSwagger();
 
+//CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("all", policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -39,6 +43,8 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = string.Empty;
     });
 }
+
+app.UseCors("all"); 
 
 app.MapCarter();
 
